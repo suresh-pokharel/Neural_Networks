@@ -15,3 +15,26 @@ for i in range(4):
   print("w1="+str(w1))
   print("w2="+str(w2))
   print("b="+str(b))
+
+  
+  # OUTPUT
+# Iteration-0########
+# [1, 1, 1, 1]
+# w1=1
+# w2=1
+# b=1
+# Iteration-1########
+# [1, -1, 1, -1]
+# w1=0
+# w2=2
+# b=0
+# Iteration-2########
+# [-1, 1, 1, -1]
+# w1=1
+# w2=1
+# b=-1
+# Iteration-3########
+# [-1, -1, 1, -1]
+# w1=2
+# w2=2
+# b=-2
