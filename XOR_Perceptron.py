@@ -59,5 +59,3 @@ obj.train(inputs,outputs, 1000000)
 
 print("After Training:\n")
 print(obj.think())
-
-
