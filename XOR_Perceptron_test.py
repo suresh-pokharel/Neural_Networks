@@ -65,7 +65,7 @@ class NN:
             print("f1=" + str(f2))
 
             # for output layer
-            s = np.dot([f1, f2, 1], [self.w1, self.w2, self.wb])
+            s = np.dot([f1, f2, -1], [self.w1, self.w2, self.wb])
             # observed output for this iteration using feed forward
             f = sigmoid(s)
             # determining error (ie. Expected(f) - Observed(outputs[i%len(l0)]))
@@ -86,15 +86,17 @@ class NN:
             # determine weight corrections for output layer
             delta_w1 = delta_3 * self.alpha * f1
             delta_w2 = delta_3 * self.alpha * f2
-            delta_wb = delta_3 * self.alpha * 1 #bias is 1
+            delta_wb = delta_3 * self.alpha * -1  # bias is 1
 
 
             # update weights at input layer
+
             delta_1 = delta_3*sigmoid_der(f1)*self.w1
             delta_2 = delta_3*sigmoid_der(f2)*self.w2
+            print("Delta2 = "+str(delta_2))
 
             # determine weight corrections for output layer
-            delta_w11 = delta_1 * self.alpha * l0[i%len(l0)][0] #x1
+            delta_w11 = delta_1 * self.alpha * l0[i%len(l0)][0] # x1
             delta_w12 = delta_2 * self.alpha * l0[i%len(l0)][0]
             delta_w21 = delta_1 * self.alpha * l0[i%len(l0)][1] #x2
             delta_w22 = delta_2 * self.alpha * l0[i%len(l0)][1]
@@ -120,12 +122,12 @@ class NN:
 
 
 # [X1 X2 Bias]
-inputs = np.array([[0, 0, 1], [0, 1, 1], [1, 0, 1], [1, 1, 1]])
+inputs = np.array([[0, 0, -1], [0, 1, -1], [1, 0, -1], [1, 1, -1]])
 
 # Expected Output
 outputs = np.array([ [0], [1], [1], [0]])
 
 obj = NN(inputs)
 
-obj.train(inputs,outputs, 5000)
+obj.train(inputs,outputs, 1000)
 
