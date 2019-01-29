@@ -103,7 +103,6 @@ for generation in range(no_generations):
     selected_parents = select_best_parents(new_population, fitness, no_parents_mating)
 
 
-
     print(selected_parents)
 
     # generate next generation by applying crossover operation over fittest offsprings
