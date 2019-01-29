@@ -1,7 +1,4 @@
 
-# References
-# A Mating Strategy for Multi-parent Genetic Algorithms by Integrating Tabu Search
-# https://www.cs.ccu.edu.tw/~ckting/pubs/cec2003.pdf
 
 # GA to maximize a function
 import numpy as np
@@ -17,7 +14,20 @@ def calculate_fitness(inputs, weights):
     # axis = 1 adds column wise
     return np.sum(inputs * weights, axis=1)
 
-def crossover():
+
+def crossover(parents, size_of_offsprings):
+    # finds the offspring from the selected parents
+    # size_of_offspring is number of offspring to produce from selected parents
+
+    # create empty array of size size_of_offsprings
+    offspring = np.zeros(size_of_offsprings)
+
+    # the point at which crossover is made between two parents
+    crossover_point = np.uint8()
+
+
+
+
 
 def select_best_parents(population, fitness_values, no_of_parents):
     # create a empty matrix of size no_of_parents * sol_per_population ie. 4*8
@@ -86,7 +96,15 @@ for generation in range(no_generations):
     fitness = calculate_fitness(initial_inputs, new_population)
 
     # select the best offspring as a parent for next generation
+    # [[-1.70911178  3.41416114  0.76248373  1.3703949 - 3.6846485   2.03017764]
+    # [3.09929308 - 1.91522523  1.16152566 - 2.96669409 - 0.47461211 - 1.35182463]
+    # [-0.84403851  # 1.12669114  # 1.3089964   # 1.67528352 - 0.333356 - 0.06183099]
+    # [-0.64943855  2.88827367 - 2.20031029  3.61630038 - 0.06633548 - 1.6242148]]
     selected_parents = select_best_parents(new_population, fitness, no_parents_mating)
+
+
+
     print(selected_parents)
 
     # generate next generation by applying crossover operation over fittest offsprings
+    # offsprings = crossover(selected_parents,)

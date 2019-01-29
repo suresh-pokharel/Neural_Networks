@@ -1,18 +1,21 @@
 import numpy as np
 
+
 # sigmoid function
 # activation function
 def sigmoid(x):
         return 1.0 / (1.0 + np.exp(-x))
 
+
 # derivative of sigmoid function that
 def sigmoid_der(x):
         return x*(1-x)
 
+
 class NN:
     # default constructor
     # initialize weights
-    def __init__(self,inputs={}):
+    def __init__(self, inputs = {}):
         self.inputs = inputs
 
         # learning rate

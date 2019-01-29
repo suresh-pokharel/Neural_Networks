@@ -45,7 +45,7 @@ class Kohonen:
 
 
 inputs = [[.27, .81],[.42, .70], [.43, .21]]  # input weights
-iterations = 20
+iterations = 9
 X = [0.52, 0.12]
 
 obj = Kohonen(inputs,iterations,X)
