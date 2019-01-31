@@ -22,11 +22,22 @@ def crossover(parents, size_of_offsprings):
     # create empty array of size size_of_offsprings
     offspring = np.zeros(size_of_offsprings)
 
-    # the point at which crossover is made between two parents
-    crossover_point = np.uint8()
+    # the point at which crossover is made between two parents ie. take mid point for now
+    crossover_point = np.uint8(size_of_offsprings[1]/2)
 
+    for k in range(size_of_offsprings[0]):
+        # index of first parent
+        parent_index_1 = k % parents.shape[0]
+        parent_index_2 = (k + 1) % parents.shape[0]
 
+        # now the new offspring will have 1st half from parent_1 and second half from parent_2
+        # for kth offspring, copy values from  parent1, from index 0 to crossover_point
+        offspring[k,0:crossover_point] = parents[parent_index_1,0:crossover_point]
 
+        # for 2nd half of kth offspring, copy values from  parent2, from index crossover_point to size_of_offsprings[1]
+        offspring[k,crossover_point:] = parents[parent_index_2,crossover_point:]
+
+    return offspring
 
 
 def select_best_parents(population, fitness_values, no_of_parents):
@@ -77,7 +88,7 @@ print(new_population)
 best_outputs = []
 
 # number of iterations/generations to be computed
-no_generations = 2
+no_generations = 1
 
 # number of parents mating
 no_parents_mating = 4
@@ -95,15 +106,28 @@ for generation in range(no_generations):
     #  - 16.40461743 - 1.01066003 - 15.91178617]
     fitness = calculate_fitness(initial_inputs, new_population)
 
-    # select the best offspring as a parent for next generation
+    # select the best parents for next generation
     # [[-1.70911178  3.41416114  0.76248373  1.3703949 - 3.6846485   2.03017764]
     # [3.09929308 - 1.91522523  1.16152566 - 2.96669409 - 0.47461211 - 1.35182463]
     # [-0.84403851  # 1.12669114  # 1.3089964   # 1.67528352 - 0.333356 - 0.06183099]
     # [-0.64943855  2.88827367 - 2.20031029  3.61630038 - 0.06633548 - 1.6242148]]
     selected_parents = select_best_parents(new_population, fitness, no_parents_mating)
 
-
     print(selected_parents)
 
     # generate next generation by applying crossover operation over fittest offsprings
-    # offsprings = crossover(selected_parents,)
+    # Parents: 0
+    # [[-0.2867649   0.93408083 - 1.65540785  2.91761097 - 0.85340808 - 2.4815444]
+    #  [-3.15639367  0.00461411 - 3.25848937 - 3.13084983 - 3.52819968 - 0.60952906]
+    # [1.93088492  1.25030287  0.47903939  2.4363469  2.17465714 - 1.16898281]
+    # [-1.89157854  0.66699253  2.93577152  3.24048577  1.43398486  0.47573811]]
+
+    # Offsprings after crossover
+    # [[-0.2867649   0.93408083 - 1.65540785 - 3.13084983 - 3.52819968 - 0.60952906]
+    #  [-3.15639367  0.00461411 - 3.25848937  2.4363469   2.17465714 - 1.16898281]
+    #  [1.93088492 1.25030287  0.47903939  3.24048577  1.43398486  0.47573811]
+    # [-1.89157854  0.66699253  2.93577152  2.91761097 - 0.85340808 - 2.4815444]]
+    offsprings = crossover(selected_parents,(population_size[0] - selected_parents.shape[0], num_weights))
+    print("Offsprings\n",offsprings)
+
+    #
