@@ -263,7 +263,6 @@ for generation in range(no_generations):
 
 
 # display result in plot
-
 plt.xlabel("Iterations")
 plt.ylabel("Fitness")
 plt.plot(best_outputs, marker='s', color='b')
