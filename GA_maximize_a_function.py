@@ -1,6 +1,7 @@
 
 # GA to maximize a function
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # class GACustom:
@@ -142,7 +143,10 @@ for generation in range(no_generations):
     #  - 16.40461743 - 1.01066003 - 15.91178617]
     fitness = calculate_fitness(initial_inputs, new_population)
     print("Fitness:\n", fitness)
-    print("Best fitness at this generation: ",np.max(fitness))
+    print("Best fitness at this generation: ", np.max(fitness))
+
+    # append best result to best_result[]
+    best_outputs.append(np.max(fitness))
 
     # stop if the required fitness is obtained. say 100 is what we need
     if np.max(fitness) >= target_fitness:
@@ -181,8 +185,6 @@ for generation in range(no_generations):
 
     # calculate fitness after generations
     fitness = calculate_fitness(initial_inputs, new_population)
-
-# display result in matplotlib
 
 
 # Taking our expected fitness as 100, Here is a output, where we can see the increase in best value at each iteration.
@@ -258,3 +260,11 @@ for generation in range(no_generations):
 #         ..........................................................................
 #          Target fitness obtained at generation 10
 #         ...........................................................................
+
+
+# display result in plot
+
+plt.xlabel("Iterations")
+plt.ylabel("Fitness")
+plt.plot(best_outputs, marker='s', color='b')
+plt.show()
