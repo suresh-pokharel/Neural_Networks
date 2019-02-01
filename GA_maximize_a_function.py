@@ -4,11 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# class GACustom:
-# def __init__(self, ):
-#     self.inputs = inputs
-#     self.weights = weights
-
 def calculate_fitness(inputs, weights):
     # Y = w1x1 + w2x2 + w3x3 + w4x4 + w5x5 + w6x6 + ...
     # axis = 1 adds column wise
