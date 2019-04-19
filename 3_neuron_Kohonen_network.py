@@ -1,6 +1,6 @@
 # Competitive NN
-#  three-neuron Kohonen network
-
+# Three-neuron Kohonen network
+# Self Organizing Map
 
 
 import numpy as np
