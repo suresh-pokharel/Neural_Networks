@@ -1,70 +1,106 @@
 import numpy as np
 
+
 # sigmoid function
 # activation function
 def sigmoid(x):
-        return 1.0 / (1.0 + np.exp(-x))
+    return 1.0 / (1.0 + np.exp(-x))
+
 
 # derivative of sigmoid function that
 def sigmoid_der(x):
-        return x*(1-x)
+    return x*(1-x)
+
+
+def tanh(x):
+    return (np.exp(-x) - np.exp(-x))/ (np.exp(-x) - np.exp(-x))
+
+
+def tanh_der(x):
+    return 1-tanh(x)*tanh(x)
+
 
 class NN:
-    # default constructor
     # initialize weights
-    def __init__(self,inputs={}):
+    def __init__(self):
         self.inputs = inputs
 
-        # length of inputs,ie.4
-        self.l = len(self.inputs)
+        self.inputs = 2
+        self.hidden_neurons = 2
+        self.output_neurons = 1
+        self.learning_rate = 0.1
 
-        # number of items in an input stream
-        self.li = len(self.inputs[0])
+        # initialize weights between [-0.5,0.5], array size inputs*hidden_neurons
+        self.hidden_layer_weights = np.random.uniform(-0.5, 0.5, (self.inputs, self.hidden_neurons))
+        print('hidden layer weight')
+        print(self.hidden_layer_weights)
+        # [[0.25774477 - 0.16258581 - 0.03231841 - 0.37290148 - 0.1929745]
+        # [-0.19097576  0.47019774  0.20510209  0.28022634  0.35644582]]
 
-        # initialize weights with random values
-        # when li=2 and l=4; the sample w1 is:
-        # [[ 0.58141574  0.51206203  0.12279961  0.94048891][ 0.05213876  0.83189623  0.65714897  0.45358264]]
-        self.w1 = np.random.random((self.li,self.l))
-        print("W1="+str(self.w1))
+        self.output_layer_weights = np.random.uniform(-0.5, 0.5, (self.output_neurons, self.hidden_neurons))
+        print('output layer weight')
+        print(self.output_layer_weights)
+        # [[0.17867141 - 0.02389593 - 0.34501892 - 0.34701407 - 0.06609539]]
+        output_layer_error_grad = np.zeros(self.output_neurons)
 
-        # sample W2=[[ 0.06653582][ 0.88289432][ 0.80074892][ 0.0567012 ]]
-        self.w2 = np.random.random((self.l, 1))
-        print("W2=" + str(self.w2))
+    def train(self, inputs, outputs, epochs):
+        for e in range(epochs):
+            for input, output in zip(inputs, outputs):
+                print('For input' + str(input))
+                hidden_layer_output = np.zeros(self.hidden_neurons)
+                output_layer_output = np.zeros(self.output_neurons)
 
-    # returns just sigmoid of inputs. ie. initial prediction
-    def think(self):
-        s1 = sigmoid(np.dot(self.inputs, self.w1 ))
-        s2 = sigmoid(np.dot(s1, self.w2 ))
-        return s2
+                # forward pass from input to hidden layers
+                for j in range(self.hidden_neurons):
+                    sum = 0
+                    for i in range(len(input)):
+                        sum = sum + input[i] * self.hidden_layer_weights[i][j]
+                    hidden_layer_output[j] = sum
+                print('Hidden layer output')
+                print(hidden_layer_output)
 
-    # training function
-    def train(self, inputs, outputs, iterations):
-        for i in range(iterations):
-            l0 = inputs
-            l1 = sigmoid(np.dot(l0, self.w1))
-            l2 = sigmoid(np.dot(l1, self.w2))
-            # find error
-            l2_error = outputs - l2
-            print("L2_Error: "+str(l2_error))
-            l2_delta = np.multiply(l2_error, sigmoid_der(l2))
+                # forward pass from hidden to output layer
+                for k in range(self.output_neurons):
+                    sum = 0
+                    for j in range(len(hidden_layer_output)):
+                        sum = sum + hidden_layer_output[j] * self.output_layer_weights[k][j]
+                    output_layer_output[k] = sigmoid(sum)
 
-            l1_error = np.multiply(l2_delta, self.w2.T)
-            print("L1_Error: "+str(l2_error))
+                    # BACK PROPAGATION
+                    # calculate error for the output
+                    error = output - output_layer_output[k]
 
-            l1_delta = np.multiply(l1_error, sigmoid_der(l1))
-            print("L1 delta = " + str(l1_delta))
-            self.w2 = self.w2 + np.dot(l1.T, l2_delta)
-            self.w1 = self.w1 + np.dot(l0.T, l1_delta)
+                    # calculate error gradient at op layer
+                    error_gradient = sigmoid_der(output_layer_output[k]) * error
 
+                    # weight adjustment for hidden to output layer
+                    for m in range(self.hidden_neurons):
+                        # change in error
+                        delta_weight = self.learning_rate * error_gradient * output_layer_output
+
+                        self.output_layer_weights[k][m] += delta_weight
+
+                        # calculate error gradient for hidden layer neurons
+                        sum = 0
+                        for l in range (self.output_neurons):
+                            sum = sum + error_gradient * self.output_layer_weights[l][m]
+
+                        error_gradient_hidden_delta = sigmoid_der(hidden_layer_output[m]) * sum
+
+                        for n in range(len(input)):
+                            # error gradient at hidden layer
+                            delta_weight_change = self.learning_rate * error_gradient_hidden_delta * input[n]
+                            self.hidden_layer_weights[n][m] += delta_weight_change
+
+        print("-------- After Training ----------")
+        print('hidden layer weight')
+        print(self.hidden_layer_weights)
+
+        print('output layer weight')
+        print(self.output_layer_weights)
 
 inputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
 outputs = np.array([ [0], [1], [1], [0]])
 
-obj = NN(inputs)
-print("Before Training:\n")
-print(obj.think())
-
-obj.train(inputs,outputs, 1)
-
-print("After Training:\n")
-print(obj.think())
+obj = NN()
+obj.train(inputs,outputs,1000)
